@@ -7,7 +7,11 @@ var letters = ["a","b","c"];
 $(document).ready(function() {
     for( var i = 0, len = to_load.length; i < len; i++ ) {
         audio[to_load[i]] = new Audio();
-        audio[to_load[i]].setAttribute("src","jams/"+to_load[i]+".m4a");
+        if (audio[to_load[i]].canPlayType("audio/wav")) {
+            audio[to_load[i]].setAttribute("src","jams/"+to_load[i]+".wav");
+        } else {
+            audio[to_load[i]].setAttribute("src","jams/"+to_load[i]+".m4a");
+        }
         audio[to_load[i]].addEventListener("canplaythrough",onLoadedHandler,false);
         audio[to_load[i]].addEventListener("ended",onEndedHandler,false);
         audio[to_load[i]].load();
