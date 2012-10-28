@@ -10,6 +10,11 @@ $(document).ready(function() {
         audio[tracks[i]].load();
     }
 
+    $("#form").css({
+        left: $(document).width()/2 - $("form").width()/2,
+        top: $(document).height()/2 - $("form").height()/2
+    });
+
     document.form.textarea.focus();
 });
 
