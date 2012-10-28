@@ -1,5 +1,4 @@
 html, body { width: 100%; height: 100%; }
 
-.canvas-text-editor { position: absolute; z-index: 100; }
-#bg { width: 100%; height: 100%; position: absolute; top: 0px; left: 0px; z-index: 1; opacity: .6; }
-#gotime, #savedat { cursor: pointer; }
+form, form textarea { width: 640px; height: 480px; }
+textarea { font-size: 418px; line-height: 370px; text-align: center; }
