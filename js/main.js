@@ -1,9 +1,9 @@
 var audio = {};
-var to_load = ["a","b","c","correct","incorrect","getstarted"];
+var to_load = ["a","b","c","d","e","f","g","h","i","correct","incorrect","getstarted"];
 
 var instructions = ["getstarted"];
 var answers = ["correct","incorrect"];
-var letters = ["a","b","c"];
+var letters = ["a","b","c","d","e","f","g","h","i"];
 $(document).ready(function() {
     for( var i = 0, len = to_load.length; i < len; i++ ) {
         audio[to_load[i]] = new Audio();
