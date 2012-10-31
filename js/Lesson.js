@@ -19,6 +19,7 @@ var Lesson = function( sections ) {
 
 	this.t;
 	this.ct;
+	this.recheck = 0;
 
 	self.load = function() {
 		self.sections["answers"].load();
@@ -38,11 +39,14 @@ var Lesson = function( sections ) {
 	}
 
 	this.onPlayingEnded = function( clip, section ) {
-		console.log("playing ended: " + clip);
 		clearTimeout( self.t );
 		if( clip == "getstarted" ) {
 			self.t = setTimeout( self.playNext, 500 );
 		} else if( doesInclude( self.to_load, section) ) {
+			self.ct = setTimeout( self.test, 500 );
+		} else if( clip == "correct" ) {
+			self.t = setTimeout( self.playNext, 1000 );
+		} else if( clip == "incorrect" ) {
 			self.ct = setTimeout( self.test, 500 );
 		}
 	}
@@ -50,20 +54,25 @@ var Lesson = function( sections ) {
 	this.test = function() {
 		clearTimeout( self.ct );
 		if( $("#textarea").val() == self.waiting_for ) {
-			console.log("correct!");
 			self.sections.answers.play("correct");
+			self.recheck = 0;
 		} else if( $("#textarea").val() == "" ) {
-			console.log("checking in .5 sections");
-			self.ct = setTimeout( self.test, 500 );
+			self.recheck++;
+			if( self.recheck > 10 ) { 
+				self.recheck = 0;
+				self.sections.letters.play( self.waiting_for );
+			} else {
+				self.ct = setTimeout( self.test, 500 );
+			}
 		} else if( $("#textarea").val() != self.waiting_for ) {
-			console.log("incorrect!");
 			self.sections.answers.play("incorrect");
-			self.ct = setTimeout( self.test, 500 );
-			$("#textarea").val("");
+			self.recheck = 0;
 		}
+		$("#textarea").val("");
 	}
 
 	this.playNext = function() {
+		clearTimeout( self.t );
 	    self.waiting_for = self.playing = self.sections.letters.pick();
 	    self.sections.letters.play( self.waiting_for );
 	}
