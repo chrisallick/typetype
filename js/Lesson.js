@@ -5,7 +5,7 @@ var Lesson = function( sections ) {
 
 	this.sections = {
 		"letters": new Letters(self),
-		//"words": new Words(self),
+		"words": new Words(self),
 		//"numbers": new Numbers(self)
 		"answers": new Answers(self),
 		"instructions": new Instructions(self)
@@ -43,7 +43,13 @@ var Lesson = function( sections ) {
 		if( clip == "getstarted" ) {
 			self.t = setTimeout( self.playNext, 500 );
 		} else if( doesInclude( self.to_load, section) ) {
-			self.ct = setTimeout( self.test, 500 );
+			if( section == "letters" ) {
+				self.ct = setTimeout( self.test, 500 );
+				$("#textarea").css("font-size","560px");	
+			} else if( section = "words" ) {
+				self.ct = setTimeout( self.testWord, 500 );
+				$("#textarea").css("font-size","280px");
+			}
 		} else if( clip == "correct" ) {
 			self.t = setTimeout( self.playNext, 1000 );
 		} else if( clip == "incorrect" ) {
@@ -71,10 +77,22 @@ var Lesson = function( sections ) {
 		$("#textarea").val("");
 	}
 
+	this.testWord = function() {
+		clearTimeout( self.ct );
+		if( self.waiting_for != $("#textarea").val() ) {
+			self.ct = setTimeout( self.testWord, 500 );
+		} else {
+			$("#textarea").val("");
+			self.t = setTimeout( self.playNext, 1000 );
+		}
+	}
+
 	this.playNext = function() {
 		clearTimeout( self.t );
 	    self.waiting_for = self.playing = self.sections.letters.pick();
 	    self.sections.letters.play( self.waiting_for );
+	    // self.waiting_for = self.playing = self.sections.words.pick();
+	    // self.sections.words.play( self.waiting_for );
 	}
 
 	self.load();

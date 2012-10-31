@@ -1,5 +1,6 @@
 var lesson;
 $(document).ready(function() {
+    //lesson = new Lesson(["words"]);
     lesson = new Lesson(["letters"]);
 
     $("#form").css({

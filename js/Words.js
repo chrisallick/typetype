@@ -29,18 +29,21 @@ var Words = function( parent ) {
 	    if( self.loaded == self.words.length ) {
 	    	self.all_loaded = true;
 	    	parent.onSectionLoad();
-	        // playing = "getstarted";
-	        // audio["getstarted"].play();
 	    }
 	}
 
 	this.onEndedHandler = function() {
-		parent.onPlayingEnded( self.playing );
+		parent.onPlayingEnded( self.playing, "words" );
 		self.playing = "";
 	}
 
-	this.play = function( letter ) {
-		self.playing = letter;
+	this.play = function( word ) {
+		self.playing = word;
 		self.audio[word].play();
+	}
+
+	this.pick = function() {
+		var next = Math.floor(Math.random()*self.words.length);
+		return self.words[next];
 	}
 }
