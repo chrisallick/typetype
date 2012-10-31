@@ -89,10 +89,10 @@ var Lesson = function( sections ) {
 
 	this.playNext = function() {
 		clearTimeout( self.t );
-	    self.waiting_for = self.playing = self.sections.letters.pick();
-	    self.sections.letters.play( self.waiting_for );
-	    // self.waiting_for = self.playing = self.sections.words.pick();
-	    // self.sections.words.play( self.waiting_for );
+	    // self.waiting_for = self.playing = self.sections.letters.pick();
+	    // self.sections.letters.play( self.waiting_for );
+	    self.waiting_for = self.playing = self.sections.words.pick();
+	    self.sections.words.play( self.waiting_for );
 	}
 
 	self.load();
