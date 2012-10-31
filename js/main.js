@@ -1,21 +1,18 @@
-var audio = {};
-var to_load = ["a","b","c","d","e","f","g","h","i","correct","incorrect","getstarted"];
+// var audio = {};
+// var to_load = {"letters":[],"answers":[],"numbers":[],"words":[],"instructions":[]};
 
-var instructions = ["getstarted"];
-var answers = ["correct","incorrect"];
-var letters = ["a","b","c","d","e","f","g","h","i"];
+// to_load["instructions"] = ["getstarted"];
+// to_load["answers"] = ["correct","incorrect"];
+// to_load["letters"] = 
+// to_load["numbers"] = ["0","1","2","3","4","5","6","7","8","9"];
+// to_load["words"] = ["fox","bird","cat","dog","hello"];
+// var total_items = 0;
+var lesson;
 $(document).ready(function() {
-    for( var i = 0, len = to_load.length; i < len; i++ ) {
-        audio[to_load[i]] = new Audio();
-        if (audio[to_load[i]].canPlayType("audio/wav")) {
-            audio[to_load[i]].setAttribute("src","jams/"+to_load[i]+".wav");
-        } else {
-            audio[to_load[i]].setAttribute("src","jams/"+to_load[i]+".m4a");
-        }
-        audio[to_load[i]].addEventListener("canplaythrough",onLoadedHandler,false);
-        audio[to_load[i]].addEventListener("ended",onEndedHandler,false);
-        audio[to_load[i]].load();
-    }
+    // count all the things we are going to load so that we know when everything is loaded
+    //for( section in to_load ) { total_items += to_load[section].length; }
+
+    lesson = new Lesson(["letters"]);
 
     $("#form").css({
         left: $(document).width()/2 - $("form").width()/2,
@@ -24,29 +21,6 @@ $(document).ready(function() {
 
     document.form.textarea.focus();
 });
-
-
-/*
-    array to check item agains
-    return true if item in array, false if not
-*/
-doesInclude = function( array, item ) {
-    return (array.indexOf(item) != -1);
-}
-
-/*
-    set loaded to 0 and count up as audio is loaded
-    if they are all loaded, play the first letter
-*/
-var loaded = 0;
-var playing = "";
-onLoadedHandler = function(event) {
-    loaded++;
-    if( loaded == to_load.length ) {
-        playing = "getstarted";
-        audio["getstarted"].play();
-    }
-}
 
 /*
     t - timeout to play next
@@ -63,17 +37,10 @@ onEndedHandler = function(event) {
         t = setTimeout( playNext, 500 );
     } else if( playing == "correct" ) {
         t = setTimeout( playNext, 1000 );
-    } else if( doesInclude(letters,playing) ) {
+    } else if( doesInclude(letters,playing) || doesInclude(words,playing) ) {
         ct = setTimeout( checkInput, 250 );
     }
     playing = "";
-}
-
-/*
-    if the value is correct, end the round
-*/
-roundOver = function() {
-
 }
 
 /*
@@ -104,18 +71,4 @@ checkInput = function() {
         ct = setTimeout( checkInput, 1000 );
     }
     $("#textarea").val("");
-}
-
-/*
-    next - random value from 0 - length of letters array
-
-    pick a random letter
-    set playing to that letter
-    play it
-*/
-var waiting_for = "";
-playNext = function() {
-    var next = Math.floor(Math.random()*letters.length);
-    waiting_for = playing = letters[next];
-    audio[playing].play();
 }
