@@ -110,16 +110,10 @@ var Eletype = function( sections ) {
 	*/
 	this.playNext = function() {
 		clearTimeout( self.t );
-
 		self.current_section = self.pickSection();
 	    self.waiting_for = self.playing = self.sections[self.current_section].pick();
 	    console.log( self.current_section, self.waiting_for);
 	    self.sections[self.current_section].play( self.waiting_for );
-
-	    // self.waiting_for = self.playing = self.sections.letters.pick();
-	    // self.sections.letters.play( self.waiting_for );
-	    // self.waiting_for = self.playing = self.sections.words.pick();
-	    // self.sections.words.play( self.waiting_for );
 	}
 
 	/*
