@@ -1,7 +1,6 @@
-var lesson;
+var eletype;
 $(document).ready(function() {
-    lesson = new Lesson(["words"]);
-    //lesson = new Lesson(["letters"]);
+    eletype = new Lesson(["letters"]);
 
     $("#form").css({
         left: $(document).width()/2 - $("form").width()/2,
@@ -13,7 +12,6 @@ $(document).ready(function() {
     		"background-color": "black",
     		"color": "white"
     	});
-    	//$("#textarea").css("color","white");
     },function(){
     	$(".invert").css({
     		"background-color": "white",

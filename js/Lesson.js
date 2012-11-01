@@ -1,99 +1,55 @@
-var Lesson = function( sections ) {
-	var self = this;
+var Lesson = function( _p, _section, _assets ) {
+    var self = this;
+    var parent = _p;
 
-	this.to_load = sections;
+    this.assets = _assets;
+    this.section = _section;
 
-	this.sections = {
-		"letters": new Letters(self),
-		"words": new Words(self),
-		//"numbers": new Numbers(self)
-		"answers": new Answers(self),
-		"instructions": new Instructions(self)
-	};
+    this.audio = {};
+    this.loaded = 0;
+    this.all_loaded = false;
+    this.playing = "";
 
-	this.sections_loaded = 0;
+    this.load = function() {
+        for( var i = 0, len = self.assets.length; i < len; i++ ) {
+            var asset = self.assets[i];
 
-	this.playing = "";
-	this.waiting_for;
-	//this.section_playing = "";
+            self.audio[asset] = new Audio();
+            if( self.audio[asset].canPlayType("audio/mpeg") ) {
+                self.audio[asset].setAttribute("src","jams/"+self.assets[i]+".mp3");
+            } else if( self.audio[asset].canPlayType("audio/wav") ) {
+                self.audio[asset].setAttribute("src","jams/"+self.assets[i]+".wav");
+            } else if( self.audio[asset].canPlayType("audio/m4a") ) {
+                self.audio[asset].setAttribute("src","jams/"+self.assets[i]+".m4a");
+            } else {
+                $("#about").html("Unfortunately you're browser does not support any of the available media types.");
+            }
+            self.audio[asset].addEventListener("canplaythrough",self.onLoadedHandler,false);
+            self.audio[asset].addEventListener("ended",self.onEndedHandler,false);
+        }
+    }
 
-	this.t;
-	this.ct;
-	this.recheck = 0;
+    this.onLoadedHandler = function(event) {
+        self.loaded++;
+        if( self.loaded == self.assets.length ) {
+            self.all_loaded = true;
+            parent.onSectionLoad();
+        }
+    }
 
-	self.load = function() {
-		self.sections["answers"].load();
-		self.sections["instructions"].load();
-		for( var i = 0; i < self.to_load.length; i++ ) {
-			var section = self.to_load[i];
-			self.sections[section].load();
-		}
-	}
+    this.onEndedHandler = function() {
+        parent.onPlayingEnded( self.playing, self.section );
+        self.playing = "";
+    }
 
-	this.onSectionLoad = function() {
-		self.sections_loaded++;
-		if( self.sections_loaded == self.to_load.length ) {
-			console.log("all loaded: " + self.to_load);
-			this.sections.instructions.play("getstarted");
-		}
-	}
+    this.play = function( asset ) {
+        self.playing = asset;
+        //self.audio[asset].load(); // unclear if this is needed or not?
+        self.audio[asset].play();
+    }
 
-	this.onPlayingEnded = function( clip, section ) {
-		clearTimeout( self.t );
-		if( clip == "getstarted" ) {
-			self.t = setTimeout( self.playNext, 500 );
-		} else if( doesInclude( self.to_load, section) ) {
-			if( section == "letters" ) {
-				self.ct = setTimeout( self.test, 500 );
-				$("#textarea").css("font-size","560px");	
-			} else if( section = "words" ) {
-				self.ct = setTimeout( self.testWord, 500 );
-				$("#textarea").css("font-size","280px");
-			}
-		} else if( clip == "correct" ) {
-			self.t = setTimeout( self.playNext, 1000 );
-		} else if( clip == "incorrect" ) {
-			self.ct = setTimeout( self.test, 500 );
-		}
-	}
-
-	this.test = function() {
-		clearTimeout( self.ct );
-		if( $("#textarea").val() == self.waiting_for ) {
-			self.sections.answers.play("correct");
-			self.recheck = 0;
-		} else if( $("#textarea").val() == "" ) {
-			self.recheck++;
-			if( self.recheck > 10 ) { 
-				self.recheck = 0;
-				self.sections.letters.play( self.waiting_for );
-			} else {
-				self.ct = setTimeout( self.test, 500 );
-			}
-		} else if( $("#textarea").val() != self.waiting_for ) {
-			self.sections.answers.play("incorrect");
-			self.recheck = 0;
-		}
-		$("#textarea").val("");
-	}
-
-	this.testWord = function() {
-		clearTimeout( self.ct );
-		if( self.waiting_for != $("#textarea").val() ) {
-			self.ct = setTimeout( self.testWord, 500 );
-		} else {
-			$("#textarea").val("");
-			self.t = setTimeout( self.playNext, 1000 );
-		}
-	}
-
-	this.playNext = function() {
-		clearTimeout( self.t );
-	    // self.waiting_for = self.playing = self.sections.letters.pick();
-	    // self.sections.letters.play( self.waiting_for );
-	    self.waiting_for = self.playing = self.sections.words.pick();
-	    self.sections.words.play( self.waiting_for );
-	}
-
-	self.load();
+    this.pick = function() {
+        var next = Math.floor(Math.random()*self.assets.length);
+        return self.assets[next];
+    }
 }
