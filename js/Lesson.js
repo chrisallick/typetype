@@ -43,6 +43,7 @@ var Lesson = function( _p, _section, _assets ) {
     }
 
     this.play = function( asset ) {
+        document.form.textarea.focus();
         self.playing = asset;
         //self.audio[asset].load(); // unclear if this is needed or not?
         self.audio[asset].play();

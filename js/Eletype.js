@@ -3,22 +3,30 @@ var Eletype = function( sections ) {
 
 	this.to_load = sections;
 
+	/*
+		create a section object that holds all the assets required for that lesson
+	*/
 	this.sections = {
-		"letters": new Base(self, "letters", ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]),
-		"words": new Base(self, "words", ["fox","bird","dog","cat","hello"]),
+		"letters": new Lesson(self, "letters", ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]),
+		"words": new Lesson(self, "words", ["fox","bird","dog","cat","hello"]),
 		//"numbers": new Numbers(self)
-		"answers": new Base(self, "answers", ["correct","incorrect"]),
-		"instructions": new Base(self, "instructions", ["getstarted"])
+		"answers": new Lesson(self, "answers", ["correct","incorrect"]),
+		"instructions": new Lesson(self, "instructions", ["getstarted"])
 	};
 
 	this.sections_loaded = 0;
 
 	this.playing = "";
 	this.waiting_for;
+	this.current_section;
 	this.t;
 	this.ct;
 	this.recheck = 0;
 
+	/*
+		manually load the answers and instructions set
+		load all included lessons
+	*/
 	self.load = function() {
 		self.sections["answers"].load();
 		self.sections["instructions"].load();
@@ -28,6 +36,10 @@ var Eletype = function( sections ) {
 		}
 	}
 
+	/*
+		when a second(lesson) is loaded check to see if all lessons
+		have been loaded. If so, start.
+	*/
 	this.onSectionLoad = function() {
 		self.sections_loaded++;
 		if( self.sections_loaded == self.to_load.length ) {
@@ -36,6 +48,10 @@ var Eletype = function( sections ) {
 		}
 	}
 
+	/*
+		when an audio clip is done, you'll need to play
+		another audio clip. clear the timer and decied which to play.
+	*/
 	this.onPlayingEnded = function( clip, section ) {
 		clearTimeout( self.t );
 		if( clip == "getstarted" ) {
@@ -55,6 +71,10 @@ var Eletype = function( sections ) {
 		}
 	}
 
+	/*
+		was the correct answer entered? if so, play the next letter/word,
+		or check again, or say it was incorrect
+	*/
 	this.test = function() {
 		clearTimeout( self.ct );
 		if( $("#textarea").val() == self.waiting_for ) {
@@ -75,22 +95,39 @@ var Eletype = function( sections ) {
 		$("#textarea").val("");
 	}
 
-	// this.testWord = function() {
-	// 	clearTimeout( self.ct );
-	// 	if( self.waiting_for != $("#textarea").val() ) {
-	// 		self.ct = setTimeout( self.testWord, 500 );
-	// 	} else {
-	// 		$("#textarea").val("");
-	// 		self.t = setTimeout( self.playNext, 1000 );
-	// 	}
-	// }
+	this.testWord = function() {
+		clearTimeout( self.ct );
+		if( self.waiting_for != $("#textarea").val() ) {
+			self.ct = setTimeout( self.testWord, 500 );
+		} else {
+			$("#textarea").val("");
+			self.sections.answers.play("correct");
+		}
+	}
 
+	/*
+		decide which section to play, play a random choice from that section
+	*/
 	this.playNext = function() {
 		clearTimeout( self.t );
-	    self.waiting_for = self.playing = self.sections.letters.pick();
-	    self.sections.letters.play( self.waiting_for );
+
+		self.current_section = self.pickSection();
+	    self.waiting_for = self.playing = self.sections[self.current_section].pick();
+	    console.log( self.current_section, self.waiting_for);
+	    self.sections[self.current_section].play( self.waiting_for );
+
+	    // self.waiting_for = self.playing = self.sections.letters.pick();
+	    // self.sections.letters.play( self.waiting_for );
 	    // self.waiting_for = self.playing = self.sections.words.pick();
 	    // self.sections.words.play( self.waiting_for );
+	}
+
+	/*
+		returns a random section from the list of loaded sections
+	*/
+	this.pickSection = function() {
+        var next = Math.floor(Math.random()*self.to_load.length);
+        return self.to_load[next];
 	}
 
 	self.load();
