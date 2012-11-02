@@ -8,10 +8,10 @@ var Eletype = function( sections ) {
 	*/
 	this.sections = {
 		"letters": new Lesson(self, "letters", ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]),
-		"words": new Lesson(self, "words", ["fox","bird","dog","cat","hello"]),
+		"words": new Lesson(self, "words", ["fox","bird","dog","cat","hello","cold","good","green","hot","red","sky","warm"]),
 		//"numbers": new Numbers(self)
 		"answers": new Lesson(self, "answers", ["correct","incorrect"]),
-		"instructions": new Lesson(self, "instructions", ["getstarted"])
+		"instructions": new Lesson(self, "instructions", ["getstarted","getstartedwords"])
 	};
 
 	this.sections_loaded = 0;
@@ -44,7 +44,12 @@ var Eletype = function( sections ) {
 		self.sections_loaded++;
 		if( self.sections_loaded == self.to_load.length ) {
 			console.log("all loaded: " + self.to_load);
-			this.sections.instructions.play("getstarted");
+			if( self.to_load.length == 1 && self.to_load[0] == "words" ) {
+				this.sections.instructions.play("getstartedwords");
+			} else {
+				this.sections.instructions.play("getstarted");
+			}
+			
 		}
 	}
 
@@ -54,7 +59,7 @@ var Eletype = function( sections ) {
 	*/
 	this.onPlayingEnded = function( clip, section ) {
 		clearTimeout( self.t );
-		if( clip == "getstarted" ) {
+		if( clip == "getstarted" || clip == "getstartedwords" ) {
 			self.t = setTimeout( self.playNext, 500 );
 		} else if( doesInclude( self.to_load, section) ) {
 			if( section == "letters" ) {
@@ -103,10 +108,21 @@ var Eletype = function( sections ) {
 	this.testWord = function() {
 		clearTimeout( self.ct );
 		if( self.waiting_for != $("#textarea").val() ) {
-			self.ct = setTimeout( self.testWord, 500 );
+			self.recheck++;
+			if( self.recheck > 16 ) {
+				self.recheck = 0;
+				self.sections.words.play( self.waiting_for );
+			} else {
+				self.ct = setTimeout( self.testWord, 500 );
+			}
 		} else {
-			$("#textarea").val("");
-			self.sections.answers.play("correct");
+			var wait = setTimeout(function(){
+				clearTimeout( wait );
+				$("#textarea").val("");
+				self.recheck = 0;
+				self.sections.answers.play("correct");
+			}, 1000 );
+
 		}
 	}
 
