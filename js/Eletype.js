@@ -78,8 +78,12 @@ var Eletype = function( sections ) {
 	this.test = function() {
 		clearTimeout( self.ct );
 		if( $("#textarea").val() == self.waiting_for ) {
-			self.sections.answers.play("correct");
-			self.recheck = 0;
+			var wait = setTimeout(function(){
+				clearTimeout( wait );
+				self.sections.answers.play("correct");
+				self.recheck = 0;
+				$("#textarea").val("");
+			}, 1000 );
 		} else if( $("#textarea").val() == "" ) {
 			self.recheck++;
 			if( self.recheck > 10 ) { 
@@ -91,8 +95,9 @@ var Eletype = function( sections ) {
 		} else if( $("#textarea").val() != self.waiting_for ) {
 			self.sections.answers.play("incorrect");
 			self.recheck = 0;
+			$("#textarea").val("");
 		}
-		$("#textarea").val("");
+		
 	}
 
 	this.testWord = function() {
