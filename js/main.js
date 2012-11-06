@@ -13,7 +13,19 @@ $(document).ready(function() {
     $("#instructions").css({
         left: $(document).width()/2 - $("#instructions").width()/2,
         top: $(document).height()/2 - $("#instructions").height()/2 - 100
-    })
+    });
+
+    $(window).resize(function(){
+        $("#form").css({
+            left: $(document).width()/2 - $("form").width()/2,
+            top: $(document).height()/2 - $("#form").height()/2 - 100
+        });
+
+        $("#instructions").css({
+            left: $(document).width()/2 - $("#instructions").width()/2,
+            top: $(document).height()/2 - $("#instructions").height()/2 - 100
+        });        
+    });
 
     /*
         try to maintain the focus on the text area so people don't get confused
@@ -71,7 +83,6 @@ $(document).ready(function() {
             s.push("letters");
             s.push("words");
         }
-        //eletype = new Eletype(s);
         eletype.load(s);
         document.form.textarea.focus();
     });
@@ -98,12 +109,14 @@ $(document).ready(function() {
     		"color": "white"
     	});
         document.form.textarea.focus();
+        eletype.textcolor = "white";
     },function(){
     	$(".invert").css({
     		"background-color": "white",
     		"color": "black"
     	});
         document.form.textarea.focus();
+        eletype.textcolor = "black";
     });
 
     /*
