@@ -1,7 +1,8 @@
-var Eletype = function( sections ) {
+var Eletype = function() {
 	var self = this;
 
-	this.to_load = sections;
+	this.to_load = new Array();
+	this.textcolor = "black";
 
 	/*
 		create a section object that holds all the assets required for that lesson
@@ -11,10 +12,11 @@ var Eletype = function( sections ) {
 		"words": new Lesson(self, "words", ["fox","bird","dog","cat","hello","cold","good","green","hot","red","sky","warm"]),
 		//"numbers": new Numbers(self)
 		"answers": new Lesson(self, "answers", ["correct","incorrect"]),
-		"instructions": new Lesson(self, "instructions", ["getstarted","getstartedwords"])
+		"instructions": new Lesson(self, "instructions", ["getstarted","getstartedwords","chirp"])
 	};
 
 	this.sections_loaded = 0;
+	this.effects_loaded = 0;
 
 	this.playing = "";
 	this.waiting_for;
@@ -23,33 +25,46 @@ var Eletype = function( sections ) {
 	this.ct;
 	this.recheck = 0;
 
+	this.ready = false;
+
 	/*
 		manually load the answers and instructions set
 		load all included lessons
 	*/
-	self.load = function() {
-		self.sections["answers"].load();
-		self.sections["instructions"].load();
+	self.load = function( sections ) {
+		self.to_load = sections;
 		for( var i = 0; i < self.to_load.length; i++ ) {
 			var section = self.to_load[i];
 			self.sections[section].load();
 		}
 	}
 
+	self.init = function() {
+		self.sections["answers"].load();
+		self.sections["instructions"].load();
+	}
+
 	/*
 		when a second(lesson) is loaded check to see if all lessons
 		have been loaded. If so, start.
 	*/
-	this.onSectionLoad = function() {
-		self.sections_loaded++;
-		if( self.sections_loaded == self.to_load.length ) {
-			console.log("all loaded: " + self.to_load);
-			if( self.to_load.length == 1 && self.to_load[0] == "words" ) {
-				this.sections.instructions.play("getstartedwords");
-			} else {
-				this.sections.instructions.play("getstarted");
+	this.onSectionLoad = function( section ) {
+		if( section == "instructions" || section == "answers" ) {
+			self.effects_loaded++;
+			if( self.effects_loaded == 2 ) {
+				parent.onEletypeReady();
 			}
-			
+		} else {
+			self.sections_loaded++;
+			if( self.sections_loaded == self.to_load.length ) {
+				console.log("all loaded: " + self.to_load);
+				if( self.to_load.length == 1 && self.to_load[0] == "words" ) {
+					this.sections.instructions.play("getstartedwords");
+				} else {
+					this.sections.instructions.play("getstarted");
+				}
+				
+			}
 		}
 	}
 
@@ -83,11 +98,12 @@ var Eletype = function( sections ) {
 	this.test = function() {
 		clearTimeout( self.ct );
 		if( $("#textarea").val() == self.waiting_for ) {
+			$("#textarea").css("color","#61b004");
 			var wait = setTimeout(function(){
 				clearTimeout( wait );
 				self.sections.answers.play("correct");
 				self.recheck = 0;
-				$("#textarea").val("");
+				$("#textarea").val("").css("color","black");
 			}, 1000 );
 		} else if( $("#textarea").val() == "" ) {
 			self.recheck++;
@@ -98,9 +114,13 @@ var Eletype = function( sections ) {
 				self.ct = setTimeout( self.test, 500 );
 			}
 		} else if( $("#textarea").val() != self.waiting_for ) {
-			self.sections.answers.play("incorrect");
-			self.recheck = 0;
-			$("#textarea").val("");
+			$("#textarea").css("color","#e54b16");
+			var wait = setTimeout(function(){
+				clearTimeout( wait );
+				self.sections.answers.play("incorrect");
+				self.recheck = 0;
+				$("#textarea").val("").css("color","black");
+			}, 1000);
 		}
 		
 	}
@@ -145,5 +165,5 @@ var Eletype = function( sections ) {
         return self.to_load[next];
 	}
 
-	self.load();
+	self.init();
 }

@@ -33,7 +33,7 @@ var Lesson = function( _p, _section, _assets ) {
         self.loaded++;
         if( self.loaded == self.assets.length ) {
             self.all_loaded = true;
-            parent.onSectionLoad();
+            parent.onSectionLoad( self.section );
         }
     }
 

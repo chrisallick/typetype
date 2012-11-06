@@ -13,32 +13,38 @@
         <script src='./js/Lesson.js' type='text/javascript'></script>
     </head>
     <body class="invert">
-        <!-- <div id="logo"></div> -->
-        <div id="contrast">invert</div>
-        <div>
-            <select id="section">
-                <option value="0">Pick a Lesson</option>
-                <option value="1">Letters</option>
-                <option value="2">Words</option>
-                <option value="3">Letters + Words</option>
-<!--                 <option value="4">Letters + Numbers</option> -->
-<!--                 <option value="5">All</option> -->
-            </select>
+        
+        <div id="footer">
+            <div id="logo">
+                <a href="#"><img src="./img/logo.gif" /></a>
+            </div>
+            <div>
+                <select id="section">
+                    <option value="0">Pick a Lesson</option>
+                    <option value="1">Letters</option>
+                    <option value="2">Words</option>
+                    <option value="3">Letters + Words</option>
+                </select>
+            </div>
+            <div id="contrast">
+                invert
+            </div>
         </div>
+
         <div id="about">
-            <h2>About</h2>
-            <p>TypeType hopes to help people practice their keyboard skills!</p>
-            <p>TypeType has been tested in the latest verison of Chrome and Internet Explorer 9 on the PC and the latest versions of Chrome, Firefox and Safari on the Mac.</p>
+            <h2>ABOUT</h2>
+            <p class="invert">TypeType hopes to help people practice their keyboard skills!<!-- TypeType has been tested in the latest verison of Chrome and Internet Explorer 9 on the PC and the latest versions of Chrome, Firefox and Safari on the Mac. --></p>
         </div>
+
         <div id="instructions">
-            <h2>Instructions:</h2>
-            <p>1) Make sure you speakers are on.</p>
-            <p>2) Test the volume level.</p>
-            <p>3) Select a section from the drop down.</p>
-            <p>4) Listen for further instructions.</p>
+            <h2>INSTRUCTIONS</h2>
+            <p><img class="power" width="40" src="./img/icons/icon.power.png" /> <a id="testspeakers" href="#">Click to test your speakers</a></p>
+            <p><img class="volume" width="40" src="./img/icons/icon.volume.png" /> <a id="playchirp" href="#">Click to test volume level</a></p>
+            <p><img class="arrow" width="40" src="./img/icons/icon.arrow.png" /> Select a section from the drop down</p>
+            <p><img class="listen" width="40" src="./img/icons/icon.ear.png" /> Listen for further instructions</p>
         </div>
         <form id="form" name="form">
-           <textarea id="textarea" class="invert" name="textarea"></textarea>
+           <textarea class="invert" id="textarea" class="invert" name="textarea"></textarea>
        </form>
     </body>
 </html>

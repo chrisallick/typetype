@@ -1,9 +1,37 @@
-html, body { width: 100%; height: 100%; }
+html, body { width: 100%; height: 100%; font: bold 16px Helvetica; }
+
+* { -webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none; }
 
 form, form textarea { position: absolute; width: 900px; height: 500px; outline: none; border: none; }
-textarea { text-transform: uppercase; font-size: 560px; line-height: 410px; text-align: center; overflow-y: hidden; }
+textarea { text-transform: uppercase; font-family: Helvetica; font-size: 610px; line-height: 520px; text-align: center; overflow-y: hidden; display: none; }
+textarea { -webkit-touch-callout: auto;
+-webkit-user-select: auto;
+-khtml-user-select: auto;
+-moz-user-select: auto;
+-ms-user-select: auto;
+user-select: auto; }
 
-#contrast { cursor: pointer; }
+#instructions { position: absolute; width: 600px;  z-index: 1000; opacity: 0; }
+#instructions h2 { text-align: left; font-size: 80px; color: #469cae; padding-bottom: 30px;  }
+#instructions p { color: #333333; font-size: 30px; padding-bottom: 20px; }
+#instructions p img { position: relative; }
+.power { top: 10px; padding-right: 10px; }
+.volume { top: 9px; padding-right: 10px; }
+.arrow { top: 9px; padding-right: 10px; }
+.listen { top: 9px; width: 29px; padding-right: 22px; }
 
-#about { cursor: pointer; }
-#about p { display: none; }
+#footer { position: fixed; bottom: 0px; height: 100px; width: 100%; background-color: #469cae; z-index: 1000; }
+#logo { opacity: .5; font-size: 36px; color: white; position: absolute; top: 21px; left: 32px; }
+#logo a { color: white; }
+
+#section { position: absolute; top: 35px; right: 151px; font-size: 30px; opacity: 0; }
+#contrast { font-size: 36px; color: white; border-bottom: 1px solid white; cursor: pointer; position: absolute; top: 24px; right: 32px; }
+
+#about { width: 300px; height: 50px; cursor: pointer; font-size: 20px; position: absolute; bottom: 120px; right: 32px; font-weight: normal; }
+#about h2 { position: absolute; bottom: 0px; right: 0px; color: #CCCCCC; }
+#about p { display: none; position: absolute; bottom: 0px; color: #333333; font-weight: bold;}
