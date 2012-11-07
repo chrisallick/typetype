@@ -10,7 +10,6 @@ var Eletype = function() {
 	this.sections = {
 		"letters": new Lesson(self, "letters", ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]),
 		"words": new Lesson(self, "words", ["fox","bird","dog","cat","hello","cold","good","green","hot","red","sky","warm"]),
-		//"numbers": new Numbers(self)
 		"answers": new Lesson(self, "answers", ["correct","incorrect"]),
 		"instructions": new Lesson(self, "instructions", ["getstarted","getstartedwords","chirp"])
 	};
@@ -57,11 +56,12 @@ var Eletype = function() {
 		} else {
 			self.sections_loaded++;
 			if( self.sections_loaded == self.to_load.length ) {
-				//console.log("all loaded: " + self.to_load);
 				if( self.to_load.length == 1 && self.to_load[0] == "words" ) {
 					this.sections.instructions.play("getstartedwords");
+					parent.onEletypeBegin();
 				} else {
 					this.sections.instructions.play("getstarted");
+					parent.onEletypeBegin()
 				}
 				
 			}

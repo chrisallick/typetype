@@ -17,7 +17,7 @@ textarea { -webkit-touch-callout: auto;
 user-select: auto; }
 
 
-#instructions { position: absolute; width: 910px;  z-index: 1000; opacity: 0; }
+#instructions { position: absolute; width: 930px; z-index: 1000; opacity: 0; }
 #instructions h2 { text-align: left; font-size: 50px; color: #469cae; padding-bottom: 30px;  }
 #instructions p { color: #333333; font-size: 30px; padding-bottom: 20px; }
 #instructions p img { position: relative; }
@@ -27,13 +27,15 @@ user-select: auto; }
 .listen { top: 9px; width: 29px; padding-right: 22px; }
 #section { position: relative; top: -5px; left: 5px; font-size: 30px; opacity: 0; }
 #instructions .active { display: block; }
+#instructions .done { display: block; }
+#instructions .done a { color: grey; }
 #instructions p { display: none; padding-left: 20px; }
 
 #footer { position: fixed; bottom: 0px; height: 100px; width: 100%; background-color: #469cae; z-index: 1000; }
 #logo { opacity: .5; font-size: 36px; color: white; position: absolute; top: 21px; left: 32px; }
 #logo a { color: white; }
 
-#contrast { font-size: 36px; color: white; border-bottom: 1px solid white; cursor: pointer; position: absolute; top: 24px; right: 32px; }
+#contrast { display: none; font-size: 36px; color: white; border-bottom: 1px solid white; cursor: pointer; position: absolute; top: 24px; right: 32px; }
 
 #about { width: 300px; height: 50px; cursor: pointer; font-size: 20px; position: absolute; bottom: 120px; right: 32px; font-weight: normal; }
 #about h2 { position: absolute; bottom: 0px; right: 0px; color: #CCCCCC; }

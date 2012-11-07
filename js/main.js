@@ -49,6 +49,10 @@ $(document).ready(function() {
         e.preventDefault();
         if( eletype ) {
             eletype.sections.instructions.play("chirp");
+            var wait = setTimeout( function(){
+                clearTimeout(wait);
+                $(".active").removeClass("active").addClass("done").prev().addClass("active");
+            }, 2000 );
         }
     });
 
@@ -56,7 +60,11 @@ $(document).ready(function() {
         e.preventDefault();
         if( eletype ) {
             eletype.sections.instructions.play("chirp");
-            $(this).text("Can you hear the bird?");
+            $(this).text("You should hear a bird");
+            var wait = setTimeout( function(){
+                clearTimeout(wait);
+                $(".active").removeClass("active").addClass("done").prev().addClass("active");
+            }, 3000 );
         }
     });
 
@@ -64,16 +72,8 @@ $(document).ready(function() {
         select a section to practice
     */
     $("#section").change(function() {
-        //clearTimeout( timeout );
+        $(".active").removeClass("active").addClass("done").prev().addClass("active");
 
-        $("#textarea").show();
-        
-        $("#instructions").animate({
-            opacity: 0,
-            top: 40
-        }, function(){ $(this).hide(); });
-        
-        $("#section").fadeOut();
         var s = new Array();
         if( $(this).val() == 1 ) {
             s.push("letters");
@@ -84,11 +84,10 @@ $(document).ready(function() {
             s.push("words");
         }
         eletype.load(s);
-        document.form.textarea.focus();
     });
 
     /*
-        instructions have loaded and we're ready
+        fired when instructions have loaded and we're ready
     */
     onEletypeReady = function() {
         $("#instructions").animate({
@@ -98,6 +97,19 @@ $(document).ready(function() {
         $("#section").animate({
             opacity: 1
         })
+    }
+
+    /*
+        fired when lesson begins
+    */
+    onEletypeBegin = function() {
+        $("#instructions").animate({
+            opacity: 0,
+            top: 40
+        }, function(){ $(this).hide(); });
+        $("#textarea").show();
+        $("#contrast").fadeIn();
+        document.form.textarea.focus();
     }
 
     /*
