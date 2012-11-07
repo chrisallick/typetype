@@ -26,6 +26,7 @@ var Lesson = function( _p, _section, _assets ) {
             }
             self.audio[asset].addEventListener("canplaythrough",self.onLoadedHandler,false);
             self.audio[asset].addEventListener("ended",self.onEndedHandler,false);
+            //self.audio[asset].load();
         }
     }
 
@@ -45,7 +46,7 @@ var Lesson = function( _p, _section, _assets ) {
     this.play = function( asset ) {
         document.form.textarea.focus();
         self.playing = asset;
-        //self.audio[asset].load(); // unclear if this is needed or not?
+        self.audio[asset].load(); // unclear if this is needed or not?
         self.audio[asset].play();
     }
 

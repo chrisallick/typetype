@@ -57,7 +57,7 @@ var Eletype = function() {
 		} else {
 			self.sections_loaded++;
 			if( self.sections_loaded == self.to_load.length ) {
-				console.log("all loaded: " + self.to_load);
+				//console.log("all loaded: " + self.to_load);
 				if( self.to_load.length == 1 && self.to_load[0] == "words" ) {
 					this.sections.instructions.play("getstartedwords");
 				} else {
@@ -79,10 +79,10 @@ var Eletype = function() {
 		} else if( doesInclude( self.to_load, section) ) {
 			if( section == "letters" ) {
 				self.ct = setTimeout( self.test, 500 );
-				$("#textarea").css("font-size","560px");	
+				$("#textarea").css("font-size","610px");	
 			} else if( section = "words" ) {
 				self.ct = setTimeout( self.testWord, 500 );
-				$("#textarea").css("font-size","280px");
+				$("#textarea").css("font-size","250px");
 			}
 		} else if( clip == "correct" ) {
 			self.t = setTimeout( self.playNext, 1000 );
@@ -103,7 +103,7 @@ var Eletype = function() {
 				clearTimeout( wait );
 				self.sections.answers.play("correct");
 				self.recheck = 0;
-				$("#textarea").val("").css("color","black");
+				$("#textarea").val("").css("color",self.textcolor);
 			}, 1000 );
 		} else if( $("#textarea").val() == "" ) {
 			self.recheck++;
@@ -119,7 +119,7 @@ var Eletype = function() {
 				clearTimeout( wait );
 				self.sections.answers.play("incorrect");
 				self.recheck = 0;
-				$("#textarea").val("").css("color","black");
+				$("#textarea").val("").css("color",self.textcolor);
 			}, 1000);
 		}
 		
@@ -136,9 +136,10 @@ var Eletype = function() {
 				self.ct = setTimeout( self.testWord, 500 );
 			}
 		} else {
+			$("#textarea").css("color","#61b004");
 			var wait = setTimeout(function(){
 				clearTimeout( wait );
-				$("#textarea").val("");
+				$("#textarea").val("").css("color",self.textcolor);
 				self.recheck = 0;
 				self.sections.answers.play("correct");
 			}, 1000 );
